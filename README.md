@@ -1,6 +1,6 @@
 # myCode
 用来保存一些有用的库或其他代码
-## ThreeBSP用法示例
+## 一、ThreeBSP用法示例
 ```
 var cylinder = new THREE.CylinderGeometry(50,50,5,40);//圆柱
 var box = new THREE.BoxGeometry(40,5,40);//立方体
