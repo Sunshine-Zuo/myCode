@@ -1,0 +1,53 @@
+一、官网下载并安装nodejs，打开cmd输入node -v显示版本号证明安装成功
+二、找个合适的位置创建一个文件夹用来放项目，cmd打开命令行面板并cd进入文件夹目录，输入npm init，全部默认会生成一个package.json文件
+三、安装依赖 npm install express body-parser mysql cors --save
+	express —— 基于 node.js 平台，快速、开放、极简的 web 开发框架。
+	body-parser —— 用来解析表单。
+	mysql —— 关系型数据库管理系统。
+	cors —— 用来解决跨域问题。
+四、在文件夹根目录新建js文件，如index.js,写入代码如下：
+const express = require('express')
+const path = require('path')
+const app = express();
+
+app.use(express.static(path.join(__dirname, 'ZccWorld')))
+
+const cors = require('cors');
+app.use(cors());
+ 
+/* 引入body-parser */
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+ 
+/* 引入mysql */
+const mysql = require('mysql');
+const conn = mysql.createConnection({
+    host: '192.168.1.17',
+    port:'3396',
+    user: 'root',
+    password: 'server',
+    database: 'ai_cloud_alertreport',
+    multipleStatements: true
+})
+conn.connect();
+
+/* 监听端口 */
+app.listen(8080, () => {
+    console.log('——————————服务已启动——————————');
+})
+ 
+app.get('/', (req, res) => {
+    res.send('<p style="color:red">服务已启动</p>');
+})
+ 
+app.get('/api/getAlerttype', (req, res) => {
+    const sqlStr = 'SELECT * FROM t_alert_userconfig_alerttype'
+    conn.query(sqlStr, (error, results) => {
+        if (error) return res.json({ code: 10001, message: error})
+        res.json({ code: 10000, message: results})
+    })
+})
+
+/*数据库连接信息和查询sql按需更改*/
+五、cmd中执行node index.js,浏览器输入地址http://localhost:8080访问
