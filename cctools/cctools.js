@@ -89,3 +89,20 @@ function getPercent(num, total) {
 	}
 	return total <= 0 ? "0%" : (Math.round(num / total * 10000) / 100.00)+"%";
 }
+/**
+*修改浏览器copy事件
+*/
+function changeCopyEvent(){
+  document.addEventListener("copy",function(e){
+    //取消默认事件，才能修改复制的值
+    e.preventDefault();
+    //复制的内容
+    var copyTxt = `${window.getSelection(0).toString()}\n————————————————\n原文链接：${window.location.href}\n本文为「TinyMeng个人博客」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。`;
+    if(e.clipboardData) {
+      e.clipboardData.setData('text/plain',  copyTxt);
+    }
+    else if(window.clipboardData){
+    return window.clipboardData.setData("text", copyTxt);
+    }
+    })
+}
